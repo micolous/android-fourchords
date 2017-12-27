@@ -71,5 +71,6 @@
 
     <string name="program_text">Program:</string>
     <string name="chord_text">Chord:</string>
+    <string name="tempo_text">Tempo:</string>
 
 </resources>

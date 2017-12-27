@@ -31,12 +31,18 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mobileer.midifourchords.R;
+import com.mobileer.midikeyboard.playbackmode.PMArpeggio;
+import com.mobileer.midikeyboard.playbackmode.PMArpeggioOctave;
 import com.mobileer.midikeyboard.playbackmode.PMChord;
+import com.mobileer.midikeyboard.playbackmode.PMChordArpeggio;
+import com.mobileer.midikeyboard.playbackmode.PMChordArpeggioOctave;
 import com.mobileer.midikeyboard.playbackmode.PlaybackMode;
 import com.mobileer.miditools.MidiConstants;
 import com.mobileer.miditools.MidiInputPortSelector;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Main activity for the fourchords app.
@@ -65,6 +71,10 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
     private static final PlaybackMode[] PLAYBACK_MODES = {
             new PMChord(),
+            new PMChordArpeggio(),
+            new PMChordArpeggioOctave(),
+            new PMArpeggio(),
+            new PMArpeggioOctave(),
     };
 
     private Button mButtonMajFirst;
@@ -74,6 +84,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
     private MidiInputPortSelector mKeyboardReceiverSelector;
     private Button mProgramButton;
+    private Button mTempoButton;
     private MidiManager mMidiManager;
     private int mChannel; // ranges from 0 to 15
     private int mKey;
@@ -81,6 +92,8 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     private PlaybackMode mPlaybackMode;
     private boolean mPressed = false;
     private int mCount = 0;
+    private int mTempo = 120;
+    private Timer mTimer = null;
 
     private int[] mPrograms = new int[MidiConstants.MAX_CHANNELS]; // ranges from 0 to 127
     private byte[] mByteBuffer = new byte[3];
@@ -124,6 +137,8 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         }
     }
 
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,6 +153,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         }
 
         mProgramButton = (Button) findViewById(R.id.button_program);
+        mTempoButton = (Button)findViewById(R.id.button_tempo);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner_channels);
         spinner.setOnItemSelectedListener(new ChannelSpinnerActivity());
@@ -180,18 +196,49 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         }
 
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            destroyTimer();
             mChord = new Chord(mKey, chord);
             mPlaybackMode.start(this, mChord);
             mPressed = true;
+            mTimer = new Timer("mytimer");
+            mTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    mCount++;
+                    if (mCount >= 8 /* 4/4 metre */) {
+                        mCount = 0;
+                    }
+
+                    mPlaybackMode.cycle(MainActivity.this, mChord, mCount);
+                }
+            }, 1, playbackInterval());
             return true;
         } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             mPressed = false;
+            destroyTimer();
             mCount = 0;
             mPlaybackMode.stop(this, mChord);
             return true;
         }
 
         return false;
+    }
+
+    private void destroyTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
+        }
+    }
+
+    /**
+     * Gets the playback interval, in milliseconds.
+     * @return milliseconds
+     */
+    private int playbackInterval() {
+        int interval = 60000 / mTempo;
+        return interval >> 1;
     }
 
     private void setupMidi() {
@@ -247,6 +294,30 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
     private void updateProgramText() {
         mProgramButton.setText("" + mPrograms[mChannel]);
+    }
+
+    public void onTempoDelta(View view) {
+        Button button = (Button) view;
+        int delta = Integer.parseInt(button.getText().toString());
+        changeTempo(delta);
+    }
+
+    public void onTempoSend(View view) {
+        // does nothing yet
+    }
+
+    private void changeTempo(int delta) {
+        mTempo += delta;
+        if (mTempo < 1) {
+            mTempo = 1;
+        } else if (mTempo > 400) {
+            mTempo = 400;
+        }
+        updateTempoText();
+    }
+
+    private void updateTempoText() {
+        mTempoButton.setText("" + mTempo);
     }
 
     public void noteOff(int pitch) {
