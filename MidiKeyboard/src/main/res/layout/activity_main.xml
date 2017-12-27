@@ -61,6 +61,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/channels" />
+
+        <TextView
+            android:id="@+id/text_keys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/key_text" />
+
+        <Spinner
+            android:id="@+id/spinner_keys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/keys" />
+
+        <TextView
+            android:id="@+id/text_modes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mode_text" />
+
+        <Spinner
+            android:id="@+id/spinner_modes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/modes" />
     </LinearLayout>
 
     <LinearLayout
@@ -114,10 +138,49 @@
             android:text="+10" />
     </LinearLayout>
 
-    <com.mobileer.miditools.MusicKeyboardView
-        android:id="@+id/musicKeyboardView"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="0.5">
+
+        <TextView
+            android:id="@+id/text_chord"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/chord_text" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:id="@+id/button_maj_first"
+            android:text="I" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:id="@+id/button_per_fifth"
+            android:text="V" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:id="@+id/button_min_sixth"
+            android:text="vi" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:id="@+id/button_per_fourth"
+            android:text="IV" />
+    </LinearLayout>
+
 
 </LinearLayout>

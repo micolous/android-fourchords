@@ -16,9 +16,9 @@
 
 <resources>
 
-    <string name="app_name">MIDIKeyboard</string>
-    <string name="about_app">MIDI Keyboard View</string>
-    <string name="title_activity_synth_setup">MIDI Keyboard</string>
+    <string name="app_name">MIDIFourChords</string>
+    <string name="about_app">MIDI Four Chords player</string>
+    <string name="title_activity_synth_setup">MIDI Chorder</string>
 
     <string name="receivers_text">Receivers for Keys: </string>
     <string-array name="receivers">
@@ -44,6 +44,32 @@
         <item>"16"</item>
     </string-array>
 
+    <string name="key_text">Key</string>
+    <string-array name="keys">
+        <item>C3</item>
+        <item>C#3</item>
+        <item>D3</item>
+        <item>D#3</item>
+        <item>E3</item>
+        <item>F3</item>
+        <item>F#3</item>
+        <item>G2</item>
+        <item>G#2</item>
+        <item>A2</item>
+        <item>Bb2</item>
+        <item>B2</item>
+    </string-array>
+
+    <string name="mode_text">Mode:</string>
+    <string-array name="modes">
+        <item>Chord</item>
+        <item>Chord Arpeggio</item>
+        <item>Chord Arpeggio Octave</item>
+        <item>Arpeggio</item>
+        <item>Arpeggio Octave</item>
+    </string-array>
+
     <string name="program_text">Program:</string>
+    <string name="chord_text">Chord:</string>
 
 </resources>
