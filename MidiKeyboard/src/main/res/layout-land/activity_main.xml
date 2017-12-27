@@ -86,63 +86,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/modes" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="0.7">
-
-            <TextView
-                android:id="@+id/text_program_prompt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:text="@string/program_text" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:onClick="onProgramDelta"
-                android:text="-10" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:onClick="onProgramDelta"
-                android:text="-1" />
-
-            <Button
-                android:id="@+id/button_program"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:onClick="onProgramSend"
-                android:text="0" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:onClick="onProgramDelta"
-                android:text="+1" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:onClick="onProgramDelta"
-                android:text="+10" />
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="0.7">
+
+        <TextView
+            android:id="@+id/text_program_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/program_text" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="-10" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="-1" />
+
+        <Button
+            android:id="@+id/button_program"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramSend"
+            android:text="0" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="+1" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="+10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="0.7">
 
@@ -191,10 +189,9 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="0.6">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:id="@+id/text_chord"
@@ -203,33 +200,43 @@
             android:layout_weight="0.2"
             android:text="@string/chord_text" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:weightSum="0.4"
+        android:layout_height="90dp">
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:id="@+id/button_maj_first"
-            android:text="I" />
+            android:text="I"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:id="@+id/button_per_fifth"
-            android:text="V" />
+            android:text="V"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:id="@+id/button_min_sixth"
-            android:text="vi" />
+            android:text="vi"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:id="@+id/button_per_fourth"
-            android:text="IV" />
+            android:text="IV"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
     </LinearLayout>
 
 </LinearLayout>

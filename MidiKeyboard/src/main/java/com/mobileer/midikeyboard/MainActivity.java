@@ -51,24 +51,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     private static final String TAG = "MidiKeyboard";
     private static final int DEFAULT_VELOCITY = 64;
 
-    /**
-     * root notes array for each chord (I, V, vi, IV) in all keys (C..B)
-     */
-    static final int[][] ROOT_NOTES = {
-            {48, 43, 45, 41},   /* C3   G2  A2  F2  */
-            {49, 44, 46, 42},   /* C#3  G#2 Bb2 F#2 */
-            {50, 45, 47, 43},   /* D3   A2  B2  G2  */
-            {51, 46, 48, 44},   /* D#3  Bb2 C3  G#2 */
-            {52, 47, 49, 45},   /* E3   B2  C#3 A2  */
-            {53, 48, 50, 46},   /* F3   C3  D3  Bb2 */
-            {54, 49, 51, 47},   /* F#3  C#3 D#3 B2  */
-            {43, 50, 52, 48},   /* G2   D3  E3  C3  */
-            {44, 51, 53, 49},   /* G#2  D#3 F3  C#3 */
-            {45, 52, 54, 50},   /* A2   E3  F#3 D3  */
-            {46, 41, 43, 39},   /* Bb2  F2  G2  D#2 */
-            {47, 42, 44, 40}    /* B2   F#2 G#2 E2  */
-    };
-
     private static final PlaybackMode[] PLAYBACK_MODES = {
             new PMChord(),
             new PMChordArpeggio(),
@@ -115,7 +97,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         @Override
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
-            mKey = (0 <= pos && pos <= 12) ? pos : 0;
+            mKey = (0 <= pos && pos < 12) ? pos : 0;
         }
 
         @Override
@@ -127,7 +109,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         @Override
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
-            int mode = (0 <= pos && pos <= PLAYBACK_MODES.length) ? pos : 0;
+            int mode = (0 <= pos && pos < PLAYBACK_MODES.length) ? pos : 0;
 
             mPlaybackMode = PLAYBACK_MODES[mode];
         }

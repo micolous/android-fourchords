@@ -20,11 +20,11 @@
     <string name="about_app">MIDI Four Chords player</string>
     <string name="title_activity_synth_setup">MIDI Chorder</string>
 
-    <string name="receivers_text">Receivers for Keys: </string>
+    <string name="receivers_text">Output device: </string>
     <string-array name="receivers">
         <item>"none"</item>
     </string-array>
-    <string name="channel_text">Channel:</string>
+    <string name="channel_text">Channel: </string>
     <string-array name="channels">
         <item>"1"</item>
         <item>"2"</item>
@@ -44,7 +44,7 @@
         <item>"16"</item>
     </string-array>
 
-    <string name="key_text">Key</string>
+    <string name="key_text">Key: </string>
     <string-array name="keys">
         <item>C3</item>
         <item>C#3</item>
@@ -60,7 +60,7 @@
         <item>B2</item>
     </string-array>
 
-    <string name="mode_text">Mode:</string>
+    <string name="mode_text">Mode: </string>
     <string-array name="modes">
         <item>Chord</item>
         <item>Chord Arpeggio</item>
@@ -69,8 +69,8 @@
         <item>Arpeggio Octave</item>
     </string-array>
 
-    <string name="program_text">Program:</string>
-    <string name="chord_text">Chord:</string>
-    <string name="tempo_text">Tempo:</string>
+    <string name="program_text">Program: </string>
+    <string name="chord_text">Chord: </string>
+    <string name="tempo_text">Tempo: </string>
 
 </resources>
