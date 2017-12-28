@@ -39,6 +39,9 @@ public class Chord {
     public final int fifth;
     public final int octave;
 
+    public final int key;
+    public final int chord_num;
+
     public Chord(int key, int chord_num) {
         if (key >= ROOT_NOTES.length) throw new AssertionError();
         if (chord_num >= 4) throw new AssertionError();
@@ -47,7 +50,8 @@ public class Chord {
         third = root + THIRD_OFFSET[chord_num];
         fifth = root + FIFTH_OFFSET;
         octave = root + OCTAVE_OFFSET;
+        this.key = key;
+        this.chord_num = chord_num;
     }
-
 
 }

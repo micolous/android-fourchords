@@ -70,15 +70,18 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     private MidiManager mMidiManager;
     private int mChannel; // ranges from 0 to 15
     private int mKey;
-    private Chord mChord;
+    private int mNextKey;
+    private Chord mChord = null;
     private PlaybackMode mPlaybackMode;
-    private boolean mPressed = false;
     private int mCount = 0;
     private int mTempo = 120;
     private Timer mTimer = null;
+    private Spinner mKeySpinner;
 
     private int[] mPrograms = new int[MidiConstants.MAX_CHANNELS]; // ranges from 0 to 127
     private byte[] mByteBuffer = new byte[3];
+    private static final int MAX_KEYS = 12;
+    private Button mNextKeyButton;
 
     public class ChannelSpinnerActivity implements AdapterView.OnItemSelectedListener {
         @Override
@@ -97,7 +100,8 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         @Override
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int pos, long id) {
-            mKey = (0 <= pos && pos < 12) ? pos : 0;
+            mKey = (0 <= pos && pos < MAX_KEYS) ? pos : 0;
+            mNextKey = mKey;
         }
 
         @Override
@@ -136,6 +140,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
         mProgramButton = (Button) findViewById(R.id.button_program);
         mTempoButton = (Button)findViewById(R.id.button_tempo);
+        mNextKeyButton = (Button)findViewById(R.id.button_keychange);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner_channels);
         spinner.setOnItemSelectedListener(new ChannelSpinnerActivity());
@@ -152,9 +157,10 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         mButtonMinSixth.setOnTouchListener(this);
         mButtonPerFourth.setOnTouchListener(this);
 
-        Spinner keySpinner = (Spinner)findViewById(R.id.spinner_keys);
-        keySpinner.setOnItemSelectedListener(new KeySpinnerActivity());
-        mKey = 0;
+        mKeySpinner = (Spinner)findViewById(R.id.spinner_keys);
+        mKeySpinner.setOnItemSelectedListener(new KeySpinnerActivity());
+        mKey = mNextKey = 0;
+        updateNextKeyText();
 
         Spinner modeSpinner = (Spinner)findViewById(R.id.spinner_modes);
         modeSpinner.setOnItemSelectedListener(new ModeSpinnerActivity());
@@ -179,15 +185,19 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
             destroyTimer();
+            if (mChord != null) {
+                mPlaybackMode.stop(this, mChord);
+            }
+            mCount = 0;
+
             mChord = new Chord(mKey, chord);
             mPlaybackMode.start(this, mChord);
-            mPressed = true;
             mTimer = new Timer("mytimer");
             mTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     mCount++;
-                    if (mCount >= 8 /* 4/4 metre */) {
+                    if (mCount >= 8 /* 4/4 (common time) */) {
                         mCount = 0;
                     }
 
@@ -196,14 +206,23 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
             }, 1, playbackInterval());
             return true;
         } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            mPressed = false;
-            destroyTimer();
-            mCount = 0;
-            mPlaybackMode.stop(this, mChord);
+            if (mChord.chord_num == chord) {
+                // Only destroy if the currently playing chord is ours.
+                // Otherwise we let the downpress clean up after us.
+                destroyTimer();
+                mPlaybackMode.stop(this, mChord);
+            }
+
+            doKeyChange();
             return true;
         }
 
         return false;
+    }
+
+    private void doKeyChange() {
+        mKey = mNextKey;
+        mKeySpinner.setSelection(mKey);
     }
 
     private void destroyTimer() {
@@ -300,6 +319,31 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
     private void updateTempoText() {
         mTempoButton.setText("" + mTempo);
+    }
+
+    public void onKeyChangeDelta(View view) {
+        Button button = (Button) view;
+        int delta = Integer.parseInt(button.getText().toString());
+        changeKey(delta);
+    }
+
+    private void changeKey(int delta) {
+        mNextKey += delta;
+        if (mNextKey < 0) {
+            mNextKey = MAX_KEYS - 1;
+        } else if (mNextKey >= MAX_KEYS) {
+            mNextKey = 0;
+        }
+
+        updateNextKeyText();
+        if (mTimer == null) {
+            doKeyChange();
+        }
+    }
+
+    private void updateNextKeyText() {
+        String[] keys = getResources().getStringArray(R.array.keys);
+        mNextKeyButton.setText(keys[mNextKey]);
     }
 
     public void noteOff(int pitch) {
