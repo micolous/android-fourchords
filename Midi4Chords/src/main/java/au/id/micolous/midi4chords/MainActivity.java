@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
+ * Copyright 2017 Michael Farrell <micolous+git@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,8 @@ package au.id.micolous.midi4chords;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.midi.MidiManager;
 import android.media.midi.MidiReceiver;
@@ -132,8 +135,18 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_MIDI)) {
             setupMidi();
         } else {
-            Toast.makeText(this, "MIDI not supported!", Toast.LENGTH_LONG)
+            (new AlertDialog.Builder(this))
+                    .setMessage(R.string.no_midi)
+                    .setTitle(R.string.no_midi_title)
+                    .setPositiveButton(R.string.quit, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setCancelable(false)
                     .show();
+            return;
         }
 
         mProgramButton = (Button) findViewById(R.id.button_program);

@@ -74,4 +74,10 @@
     <string name="tempo_text">Tempo: </string>
     <string name="keychange_text">Key Change: </string>
 
+    <string name="no_midi_title">MIDI support unavailable!</string>
+    <string name="no_midi">
+        Sorry, it doesn\'t look like MIDI support is available on this device. Contact your device
+        manufacturer to see if there is an updated version of Android which does.
+    </string>
+    <string name="quit">Quit</string>
 </resources>
