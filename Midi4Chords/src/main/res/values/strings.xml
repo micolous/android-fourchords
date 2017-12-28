@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2015 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">MIDI Four Chords</string>
+    <string name="about_app">MIDI Four Chords player</string>
+    <string name="title_activity_synth_setup">MIDI Chorder</string>
+
+    <string name="receivers_text">Output device: </string>
+    <string-array name="receivers">
+        <item>"none"</item>
+    </string-array>
+    <string name="channel_text">Channel: </string>
+    <string-array name="channels">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+        <item>"5"</item>
+        <item>"6"</item>
+        <item>"7"</item>
+        <item>"8"</item>
+        <item>"9"</item>
+        <item>"10"</item>
+        <item>"11"</item>
+        <item>"12"</item>
+        <item>"13"</item>
+        <item>"14"</item>
+        <item>"15"</item>
+        <item>"16"</item>
+    </string-array>
+
+    <string name="key_text">Key: </string>
+    <string-array name="keys">
+        <item>C3</item>
+        <item>C♯3</item>
+        <item>D3</item>
+        <item>D♯3</item>
+        <item>E3</item>
+        <item>F3</item>
+        <item>F♯3</item>
+        <item>G2</item>
+        <item>G♯2</item>
+        <item>A2</item>
+        <item>B♭2</item>
+        <item>B2</item>
+    </string-array>
+
+    <string name="mode_text">Mode: </string>
+    <string-array name="modes">
+        <item>Chord</item>
+        <item>Chord Arpeggio</item>
+        <item>Chord Arpeggio Octave</item>
+        <item>Arpeggio</item>
+        <item>Arpeggio Octave</item>
+    </string-array>
+
+    <string name="program_text">Program: </string>
+    <string name="chord_text">Chord: </string>
+    <string name="tempo_text">Tempo: </string>
+    <string name="keychange_text">Key Change: </string>
+
+</resources>
