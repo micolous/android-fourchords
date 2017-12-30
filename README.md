@@ -12,6 +12,11 @@ This software requires Android Marshmallow (6.0) or later, and [MIDI support on 
 is optional per the [Android CDD][10], so not all device manufacturers ship system images with it.
 This program should work with any transport (USB host, USB gadget, BLE, and virtual).
 
+## Screenshots
+
+![Play screen](https://raw.githubusercontent.com/micolous/android-fourchords/master/screenshots/play_framed.png)
+![Setup screen](https://raw.githubusercontent.com/micolous/android-fourchords/master/screenshots/setup_framed.png)
+
 ## Usage
 
 This software outputs MIDI using [Android's MIDI APIs][9], and requires an external synthesiser to
