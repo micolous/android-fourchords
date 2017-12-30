@@ -79,7 +79,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     private int mCount = 0;
     private int mTempo = 120;
     private Timer mTimer = null;
-    private Spinner mKeySpinner;
 
     private int[] mPrograms = new int[MidiConstants.MAX_CHANNELS]; // ranges from 0 to 127
     private byte[] mByteBuffer = new byte[3];
@@ -92,19 +91,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
                                    int pos, long id) {
             mChannel = pos & 0x0F;
             updateProgramText();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    }
-
-    public class KeySpinnerActivity implements AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            mKey = (0 <= pos && pos < MAX_KEYS) ? pos : 0;
-            mNextKey = mKey;
         }
 
         @Override
@@ -168,8 +154,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         mButtonMinSixth.setOnTouchListener(this);
         mButtonPerFourth.setOnTouchListener(this);
 
-        mKeySpinner = (Spinner)findViewById(R.id.spinner_keys);
-        mKeySpinner.setOnItemSelectedListener(new KeySpinnerActivity());
         mKey = mNextKey = 0;
         updateNextKeyText();
 
@@ -233,7 +217,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
     private void doKeyChange() {
         mKey = mNextKey;
-        mKeySpinner.setSelection(mKey);
     }
 
     private void destroyTimer() {
