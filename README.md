@@ -1,6 +1,6 @@
 # [MIDI Four Chords][0]
 
-Android app which plays the Four Chords, used in [the I-V-iv-IV progression][1] and [the 50s
+Android app which plays the Four Chords, used in [the I-V-vi-IV progression][1] and [the 50s
 progression][2], which appears [frequently][3] in [popular music][4].
 
 This project is inspired by [4chord MIDI][5], a hardware device which does the same thing. It is

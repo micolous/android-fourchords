@@ -16,8 +16,6 @@
 <resources>
 
     <string name="app_name">MIDI Four Chords</string>
-    <string name="about_app">MIDI Four Chords player</string>
-    <string name="title_activity_synth_setup">MIDI Chorder</string>
     <string name="tab_setup">Setup</string>
     <string name="tab_play">Play</string>
     <string name="action_about">About</string>
@@ -46,7 +44,6 @@
         <item>"16"</item>
     </string-array>
 
-    <string name="key_text">Key: </string>
     <string-array name="keys">
         <item>C3</item>
         <item>C♯3</item>

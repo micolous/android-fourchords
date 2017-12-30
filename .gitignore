@@ -16,3 +16,5 @@ projectFilesBackup/
 /build
 /captures
 .externalNativeBuild
+release/
+*~
