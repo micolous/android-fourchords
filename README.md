@@ -1,5 +1,7 @@
 # [MIDI Four Chords][0]
 
+**[Opt-in to the beta on Google Play][11]**
+
 Android app which plays the Four Chords, used in [the I-V-vi-IV progression][1] and [the 50s
 progression][2], which appears [frequently][3] in [popular music][4].
 
@@ -54,3 +56,4 @@ Copyright 2015 Android Open Source Project.
 [8]: https://play.google.com/store/apps/details?id=net.volcanomobile.fluidsynthmidi
 [9]: https://source.android.com/devices/audio/midi
 [10]: https://source.android.com/compatibility/8.1/android-8.1-cdd.pdf
+[11]: https://play.google.com/apps/testing/au.id.micolous.midi4chords
