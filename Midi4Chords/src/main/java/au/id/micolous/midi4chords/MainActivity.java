@@ -81,7 +81,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     private Timer mTimer = null;
 
     private int[] mPrograms = new int[MidiConstants.MAX_CHANNELS]; // ranges from 0 to 127
-    private byte[] mByteBuffer = new byte[3];
     private static final int MAX_KEYS = 12;
     private Button mNextKeyButton;
 
@@ -181,6 +180,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
             destroyTimer();
             if (mChord != null) {
+                // stop the previous chord now.
                 mPlaybackMode.stop(this, mChord);
             }
             mCount = 0;
@@ -357,18 +357,20 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     }
 
     private void midiCommand(int status, int data1, int data2) {
-        mByteBuffer[0] = (byte) status;
-        mByteBuffer[1] = (byte) data1;
-        mByteBuffer[2] = (byte) data2;
+        byte[] b = new byte[3];
+        b[0] = (byte) status;
+        b[1] = (byte) data1;
+        b[2] = (byte) data2;
         long now = System.nanoTime();
-        midiSend(mByteBuffer, 3, now);
+        midiSend(b, b.length, now);
     }
 
     private void midiCommand(int status, int data1) {
-        mByteBuffer[0] = (byte) status;
-        mByteBuffer[1] = (byte) data1;
+        byte[] b = new byte[2];
+        b[0] = (byte) status;
+        b[1] = (byte) data1;
         long now = System.nanoTime();
-        midiSend(mByteBuffer, 2, now);
+        midiSend(b, b.length, now);
     }
 
     private void closeSynthResources() {
