@@ -18,7 +18,6 @@ package au.id.micolous.midi4chords;
 /**
  * Represents a chord.
  */
-
 public class Chord {
     /**
      * root notes array for each chord (I, V, vi, IV) in all keys (C..B)

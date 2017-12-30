@@ -20,6 +20,7 @@
     <string name="title_activity_synth_setup">MIDI Chorder</string>
     <string name="tab_setup">Setup</string>
     <string name="tab_play">Play</string>
+    <string name="action_about">About</string>
 
     <string name="receivers_text">Output device: </string>
     <string-array name="receivers">
@@ -81,13 +82,8 @@
         manufacturer to see if there is an updated version of Android which does.
     </string>
     <string name="quit">Quit</string>
-    <string name="title_activity_main">MIDI Four Chords</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="copyright">Copyright 2017 Michael Farrell\nCopyright 2015 Android Open Source Project</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="license">Licensed under the Apache License, Version 2.0 (the "License"); you may not use this software except in compliance with the License. You may obtain a copy of the License at\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</string>
+    <string name="website">Website and Source Code</string>
 </resources>

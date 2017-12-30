@@ -1,4 +1,4 @@
-# MIDI Four Chords
+# [MIDI Four Chords][0]
 
 Android app which plays the Four Chords, used in [the I-V-iv-IV progression][1] and [the 50s
 progression][2], which appears [frequently][3] in [popular music][4].
@@ -7,8 +7,8 @@ This project is inspired by [4chord MIDI][5], a hardware device which does the s
 based on [android-midisuite][6]'s MidiKeyboard.
 
 This software requires Android Marshmallow (6.0) or later, and [MIDI support on the device][9]. This
-is optional, so not all device manufacturers ship system images with it.  This program should work
-with any transport (USB host, USB gadget, BLE, and virtual).
+is optional per the [Android CDD][10], so not all device manufacturers ship system images with it.
+This program should work with any transport (USB host, USB gadget, BLE, and virtual).
 
 ## Usage
 
@@ -39,6 +39,11 @@ synth which [implements Android's MIDI APIs][9] should be able to be used.
 
 Apache 2.0 (same as [android-midisuite][6]).
 
+Copyright 2017 Michael Farrell.
+
+Copyright 2015 Android Open Source Project.
+
+[0]: https://github.com/micolous/android-fourchords
 [1]: https://en.wikipedia.org/wiki/I%E2%80%93V%E2%80%93vi%E2%80%93IV_progression
 [2]: https://en.wikipedia.org/wiki/50s_progression
 [3]: https://en.wikipedia.org/wiki/List_of_songs_containing_the_I%E2%80%93V%E2%80%93vi%E2%80%93IV_progression
@@ -48,3 +53,4 @@ Apache 2.0 (same as [android-midisuite][6]).
 [7]: https://play.google.com/store/apps/details?id=com.mobileer.midisynthexample
 [8]: https://play.google.com/store/apps/details?id=net.volcanomobile.fluidsynthmidi
 [9]: https://source.android.com/devices/audio/midi
+[10]: https://source.android.com/compatibility/8.1/android-8.1-cdd.pdf
