@@ -16,13 +16,13 @@
 
 package com.mobileer.miditools;
 
-import android.app.Activity;
 import android.media.midi.MidiDevice;
 import android.media.midi.MidiDeviceInfo;
 import android.media.midi.MidiManager;
 import android.media.midi.MidiOutputPort;
 import android.media.midi.MidiSender;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 
@@ -40,7 +40,7 @@ public class MidiOutputPortSelector extends MidiPortSelector {
      * @param activity
      * @param spinnerId ID from the layout resource
      */
-    public MidiOutputPortSelector(MidiManager midiManager, Activity activity,
+    public MidiOutputPortSelector(MidiManager midiManager, View activity,
             int spinnerId) {
         super(midiManager, activity, spinnerId, MidiDeviceInfo.PortInfo.TYPE_OUTPUT);
     }

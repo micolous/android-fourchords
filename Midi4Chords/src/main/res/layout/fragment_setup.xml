@@ -1,0 +1,168 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="au.id.micolous.midi4chords.SetupFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/versionName"
+            android:layout_marginRight="20dp" />
+
+        <TextView
+            android:id="@+id/text_receivers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/receivers_text" />
+
+        <Spinner
+            android:id="@+id/spinner_receivers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/receivers" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_channels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/channel_text" />
+
+        <Spinner
+            android:id="@+id/spinner_channels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/channels" />
+
+        <TextView
+            android:id="@+id/text_modes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mode_text" />
+
+        <Spinner
+            android:id="@+id/spinner_modes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/modes" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="0.6">
+
+        <TextView
+            android:id="@+id/text_tempo_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/tempo_text" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onTempoDelta"
+            android:text="-10" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onTempoDelta"
+            android:text="-1" />
+
+        <Button
+            android:id="@+id/button_tempo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="120" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onTempoDelta"
+            android:text="+1" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onTempoDelta"
+            android:text="+10" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="0.6">
+
+        <TextView
+            android:id="@+id/text_program_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/program_text" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="-10" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="-1" />
+
+        <Button
+            android:id="@+id/button_program"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramSend"
+            android:text="0" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="+1" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="onProgramDelta"
+            android:text="+10" />
+    </LinearLayout>
+
+
+</LinearLayout>

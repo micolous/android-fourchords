@@ -1,36 +1,20 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- * Copyright 2017 Michael Farrell <micolous+git@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package au.id.micolous.midi4chords;
 
-import android.annotation.SuppressLint;
+
+import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.media.midi.MidiManager;
 import android.media.midi.MidiReceiver;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mobileer.miditools.MidiConstants;
@@ -47,10 +31,8 @@ import au.id.micolous.midi4chords.playbackmode.PMChordArpeggio;
 import au.id.micolous.midi4chords.playbackmode.PMChordArpeggioOctave;
 import au.id.micolous.midi4chords.playbackmode.PlaybackMode;
 
-/**
- * Main activity for the fourchords app.
- */
-public class MainActivity extends Activity implements View.OnTouchListener, MidiController {
+public class MainActivity extends Activity implements ActionBar.TabListener, MidiController, SetupFragment.OnSetupFragmentInteractionListener, PlayFragment.OnPlayFragmentInteractionListener {
+
     private static final String TAG = "MidiKeyboard";
     private static final int DEFAULT_VELOCITY = 64;
 
@@ -62,14 +44,8 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
             new PMArpeggioOctave(),
     };
 
-    private Button mButtonMajFirst;
-    private Button mButtonPerFifth;
-    private Button mButtonMinSixth;
-    private Button mButtonPerFourth;
 
     private MidiInputPortSelector mKeyboardReceiverSelector;
-    private Button mProgramButton;
-    private Button mTempoButton;
     private MidiManager mMidiManager;
     private int mChannel; // ranges from 0 to 15
     private int mKey;
@@ -80,104 +56,174 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
     private int mTempo = 120;
     private Timer mTimer = null;
 
-    private int[] mPrograms = new int[MidiConstants.MAX_CHANNELS]; // ranges from 0 to 127
     private static final int MAX_KEYS = 12;
-    private Button mNextKeyButton;
 
-    public class ChannelSpinnerActivity implements AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            mChannel = pos & 0x0F;
-            updateProgramText();
-        }
+    private SetupFragment mSetupFragment;
+    private PlayFragment mPlayFragment;
 
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    }
-
-    public class ModeSpinnerActivity implements AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            int mode = (0 <= pos && pos < PLAYBACK_MODES.length) ? pos : 0;
-
-            mPlaybackMode = PLAYBACK_MODES[mode];
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void setChannel(int channel) {
+        mChannel = channel;
+    }
+
+    public void onProgramDelta(View view) {
+        mSetupFragment.onProgramDelta(view);
+    }
+
+    public void onProgramSend(View view) {
+        mSetupFragment.onProgramSend(view);
+    }
+
+    public void onTempoDelta(View view) {
+        mSetupFragment.onTempoDelta(view);
+    }
+
+    public void onKeyChangeDelta(View view) {
+        mPlayFragment.onKeyChangeDelta(view);
+    }
+
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
+     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_MIDI)) {
-            setupMidi();
-        } else {
-            (new AlertDialog.Builder(this))
-                    .setMessage(R.string.no_midi)
-                    .setTitle(R.string.no_midi_title)
-                    .setPositiveButton(R.string.quit, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            MainActivity.this.finish();
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-            return;
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        // Set up the action bar.
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // When swiping between different sections, select the corresponding
+        // tab. We can also use ActionBar.Tab#select() to do this if we have
+        // a reference to the Tab.
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
+        });
+
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+            // Create a tab with text corresponding to the page title defined by
+            // the adapter. Also specify this Activity object, which implements
+            // the TabListener interface, as the callback (listener) for when
+            // this tab is selected.
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+                            .setTabListener(this));
         }
 
-        mProgramButton = (Button) findViewById(R.id.button_program);
-        mTempoButton = (Button)findViewById(R.id.button_tempo);
-        mNextKeyButton = (Button)findViewById(R.id.button_keychange);
+        mSetupFragment = SetupFragment.newInstance();
+        mPlayFragment = PlayFragment.newInstance();
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_channels);
-        spinner.setOnItemSelectedListener(new ChannelSpinnerActivity());
-
-        mButtonMajFirst = (Button)findViewById(R.id.button_maj_first);
-        mButtonPerFifth = (Button)findViewById(R.id.button_per_fifth);
-        mButtonMinSixth = (Button)findViewById(R.id.button_min_sixth);
-        mButtonPerFourth = (Button)findViewById(R.id.button_per_fourth);
-
-        // Accessibility issue: performClick can't be handled here, because their presses are
-        // instant.
-        mButtonMajFirst.setOnTouchListener(this);
-        mButtonPerFifth.setOnTouchListener(this);
-        mButtonMinSixth.setOnTouchListener(this);
-        mButtonPerFourth.setOnTouchListener(this);
 
         mKey = mNextKey = 0;
-        updateNextKeyText();
-
-        Spinner modeSpinner = (Spinner)findViewById(R.id.spinner_modes);
-        modeSpinner.setOnItemSelectedListener(new ModeSpinnerActivity());
         mPlaybackMode = PLAYBACK_MODES[0];
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        int chord;
-        if (view == mButtonMajFirst) {
-            chord = 0;
-        } else if (view == mButtonPerFifth) {
-            chord = 1;
-        } else if (view == mButtonMinSixth) {
-            chord = 2;
-        } else if (view == mButtonPerFourth) {
-            chord = 3;
-        } else {
-            return false;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
 
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        // When the given tab is selected, switch to the corresponding page in
+        // the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return mSetupFragment;
+                case 1:
+                    return mPlayFragment;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.tab_setup);
+                case 1:
+                    return getString(R.string.tab_play);
+            }
+            return null;
+        }
+    }
+
+
+    public void chordTouch(int chord, boolean down_press) {
+
+        if (down_press) {
             destroyTimer();
             if (mChord != null) {
                 // stop the previous chord now.
@@ -199,8 +245,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
                     mPlaybackMode.cycle(MainActivity.this, mChord, mCount);
                 }
             }, 1, playbackInterval());
-            return true;
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+        } else {
             if (mChord.chord_num == chord) {
                 // Only destroy if the currently playing chord is ours.
                 // Otherwise we let the downpress clean up after us.
@@ -209,10 +254,8 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
             }
 
             doKeyChange();
-            return true;
         }
 
-        return false;
     }
 
     private void doKeyChange() {
@@ -236,7 +279,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         return interval >> 1;
     }
 
-    private void setupMidi() {
+    public void setupMidi(View v) {
         mMidiManager = (MidiManager) getSystemService(MIDI_SERVICE);
         if (mMidiManager == null) {
             Toast.makeText(this, "MidiManager is null!", Toast.LENGTH_LONG)
@@ -246,82 +289,26 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
 
         // Setup Spinner that selects a MIDI input port.
         mKeyboardReceiverSelector = new MidiInputPortSelector(mMidiManager,
-                this, R.id.spinner_receivers);
+                v, R.id.spinner_receivers);
 
-        /*
-        mKeyboard = (MusicKeyboardView) findViewById(R.id.musicKeyboardView);
-        mKeyboard.addMusicKeyListener(new MusicKeyboardView.MusicKeyListener() {
-            @Override
-            public void onKeyDown(int keyIndex) {
-                noteOn(mChannel, keyIndex, DEFAULT_VELOCITY);
-            }
-
-            @Override
-            public void onKeyUp(int keyIndex) {
-                noteOff(mChannel, keyIndex, DEFAULT_VELOCITY);
-            }
-        });
-        */
     }
 
-    public void onProgramSend(View view) {
-        midiCommand(MidiConstants.STATUS_PROGRAM_CHANGE + mChannel, mPrograms[mChannel]);
+    @Override
+    public void setPlaybackMode(int i) {
+        int mode = (0 <= i && i < PLAYBACK_MODES.length) ? i : 0;
+        mPlaybackMode = PLAYBACK_MODES[mode];
     }
 
-    public void onProgramDelta(View view) {
-        Button button = (Button) view;
-        int delta = Integer.parseInt(button.getText().toString());
-        changeProgram(delta);
-    }
-
-    private void changeProgram(int delta) {
-        int program = mPrograms[mChannel];
-        program += delta;
-        if (program < 0) {
-            program = 0;
-        } else if (program > 127) {
-            program = 127;
-        }
-        midiCommand(MidiConstants.STATUS_PROGRAM_CHANGE + mChannel, program);
-        mPrograms[mChannel] = program;
-        updateProgramText();
-    }
-
-    private void updateProgramText() {
-        mProgramButton.setText("" + mPrograms[mChannel]);
-    }
-
-    public void onTempoDelta(View view) {
-        Button button = (Button) view;
-        int delta = Integer.parseInt(button.getText().toString());
-        changeTempo(delta);
-    }
-
-    public void onTempoSend(View view) {
-        // does nothing yet
-    }
-
-    private void changeTempo(int delta) {
+    public void changeTempo(int delta) {
         mTempo += delta;
         if (mTempo < 1) {
             mTempo = 1;
         } else if (mTempo > 400) {
             mTempo = 400;
         }
-        updateTempoText();
     }
 
-    private void updateTempoText() {
-        mTempoButton.setText("" + mTempo);
-    }
-
-    public void onKeyChangeDelta(View view) {
-        Button button = (Button) view;
-        int delta = Integer.parseInt(button.getText().toString());
-        changeKey(delta);
-    }
-
-    private void changeKey(int delta) {
+    public int changeKey(int delta) {
         mNextKey += delta;
         if (mNextKey < 0) {
             mNextKey = MAX_KEYS - 1;
@@ -329,15 +316,10 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
             mNextKey = 0;
         }
 
-        updateNextKeyText();
         if (mTimer == null) {
             doKeyChange();
         }
-    }
-
-    private void updateNextKeyText() {
-        String[] keys = getResources().getStringArray(R.array.keys);
-        mNextKeyButton.setText(keys[mNextKey]);
+        return mNextKey;
     }
 
     public void noteOff(int pitch) {
@@ -356,7 +338,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         midiCommand(MidiConstants.STATUS_NOTE_ON + channel, pitch, velocity);
     }
 
-    private void midiCommand(int status, int data1, int data2) {
+    public void midiCommand(int status, int data1, int data2) {
         byte[] b = new byte[3];
         b[0] = (byte) status;
         b[1] = (byte) data1;
@@ -365,7 +347,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
         midiSend(b, b.length, now);
     }
 
-    private void midiCommand(int status, int data1) {
+    public void midiCommand(int status, int data1) {
         byte[] b = new byte[2];
         b[0] = (byte) status;
         b[1] = (byte) data1;
@@ -397,4 +379,15 @@ public class MainActivity extends Activity implements View.OnTouchListener, Midi
             Log.e(TAG, "mKeyboardReceiverSelector.send() failed " + e);
         }
     }
+
+    public int getChannel() {
+        return mChannel;
+    }
+
+    public int getTempo() {
+        return mTempo;
+    }
+
+    public int getNextKey() { return mNextKey; }
+
 }

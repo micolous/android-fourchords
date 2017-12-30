@@ -16,7 +16,6 @@
 
 package com.mobileer.miditools;
 
-import android.app.Activity;
 import android.media.midi.MidiDeviceInfo;
 import android.media.midi.MidiDeviceStatus;
 import android.media.midi.MidiManager;
@@ -40,7 +39,7 @@ public abstract class MidiPortSelector extends DeviceCallback {
     protected HashSet<MidiPortWrapper> mBusyPorts = new HashSet<MidiPortWrapper>();
     private Spinner mSpinner;
     protected MidiManager mMidiManager;
-    protected Activity mActivity;
+    protected View mActivity;
     private MidiPortWrapper mCurrentWrapper;
 
     /**
@@ -51,7 +50,7 @@ public abstract class MidiPortSelector extends DeviceCallback {
      * @param type
      *            TYPE_INPUT or TYPE_OUTPUT
      */
-    public MidiPortSelector(MidiManager midiManager, Activity activity,
+    public MidiPortSelector(MidiManager midiManager, View activity,
             int spinnerId, int type) {
         mMidiManager = midiManager;
         mActivity = activity;
@@ -136,7 +135,7 @@ public abstract class MidiPortSelector extends DeviceCallback {
             MidiDeviceInfo info = status.getDeviceInfo();
             Log.i(MidiConstants.TAG, "MidiPortSelector.onDeviceStatusChanged status = " + status
                     + ", mType = " + mType
-                    + ", activity = " + mActivity.getPackageName()
+                    + ", activity = " + mActivity.getClass().getCanonicalName()
                     + ", info = " + info);
             // Look for transitions from free to busy.
             int portCount = info.getInputPortCount();
