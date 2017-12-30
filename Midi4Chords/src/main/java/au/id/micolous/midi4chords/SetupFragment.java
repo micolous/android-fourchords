@@ -31,8 +31,6 @@ public class SetupFragment extends Fragment {
     private Button mTempoButton;
     private int[] mPrograms = new int[MidiConstants.MAX_CHANNELS]; // ranges from 0 to 127
 
-
-
     public SetupFragment() {
         // Required empty public constructor
     }
@@ -48,6 +46,7 @@ public class SetupFragment extends Fragment {
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -90,6 +89,10 @@ public class SetupFragment extends Fragment {
         Spinner modeSpinner = (Spinner) v.findViewById(R.id.spinner_modes);
         modeSpinner.setOnItemSelectedListener(new ModeSpinnerActivity());
 
+        if (mListener != null) {
+            updateProgramText(mListener.getChannel());
+            updateTempoText();
+        }
 
         return v;
     }
@@ -125,7 +128,7 @@ public class SetupFragment extends Fragment {
 
         if (context instanceof OnSetupFragmentInteractionListener) {
             mListener = (OnSetupFragmentInteractionListener) context;
-
+            mListener.onAttachSetup(this);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnPlayFragmentInteractionListener");
@@ -201,5 +204,7 @@ public class SetupFragment extends Fragment {
         void setupMidi(View v);
 
         void setPlaybackMode(int i);
+
+        void onAttachSetup(SetupFragment setupFragment);
     }
 }

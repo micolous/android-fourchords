@@ -36,6 +36,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
     private static final String TAG = "MidiKeyboard";
     private static final int DEFAULT_VELOCITY = 64;
 
+    private static final String TEMPO = "tempo";
+    private static final String KEY = "key";
+    private static final String MODE = "mode";
+
     private static final PlaybackMode[] PLAYBACK_MODES = {
             new PMChord(),
             new PMChordArpeggio(),
@@ -52,6 +56,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
     private int mNextKey;
     private Chord mChord = null;
     private PlaybackMode mPlaybackMode;
+    private int mPlaybackModeOffset;
     private int mCount = 0;
     private int mTempo = 120;
     private Timer mTimer = null;
@@ -135,14 +140,30 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
                             .setTabListener(this));
         }
 
-        mSetupFragment = SetupFragment.newInstance();
-        mPlayFragment = PlayFragment.newInstance();
+        if (savedInstanceState == null) {
+            mSetupFragment = SetupFragment.newInstance();
+            mPlayFragment = PlayFragment.newInstance();
 
 
-        mKey = mNextKey = 0;
-        mPlaybackMode = PLAYBACK_MODES[0];
+            mKey = mNextKey = 0;
+            mPlaybackMode = PLAYBACK_MODES[0];
+            mPlaybackModeOffset = 0;
+        } else {
+            mKey = mNextKey = savedInstanceState.getInt(KEY, 0);
+            mPlaybackModeOffset = savedInstanceState.getInt(MODE, 0);
+            mPlaybackMode = PLAYBACK_MODES[mPlaybackModeOffset];
+            mTempo = savedInstanceState.getInt(TEMPO, 120);
+        }
+
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY, mKey);
+        outState.putInt(MODE,  mPlaybackModeOffset);
+        outState.putInt(TEMPO, mTempo);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -221,6 +242,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
     }
 
 
+    @Override
+    public void onAttachPlay(PlayFragment p) {
+        mPlayFragment = p;
+    }
+
     public void chordTouch(int chord, boolean down_press) {
 
         if (down_press) {
@@ -295,8 +321,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
 
     @Override
     public void setPlaybackMode(int i) {
-        int mode = (0 <= i && i < PLAYBACK_MODES.length) ? i : 0;
-        mPlaybackMode = PLAYBACK_MODES[mode];
+        mPlaybackModeOffset = (0 <= i && i < PLAYBACK_MODES.length) ? i : 0;
+        mPlaybackMode = PLAYBACK_MODES[mPlaybackModeOffset];
+    }
+
+    @Override
+    public void onAttachSetup(SetupFragment setupFragment) {
+        mSetupFragment = setupFragment;
     }
 
     public void changeTempo(int delta) {

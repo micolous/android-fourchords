@@ -44,6 +44,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         PlayFragment fragment = new PlayFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -85,6 +86,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         super.onAttach(context);
         if (context instanceof OnPlayFragmentInteractionListener) {
             mListener = (OnPlayFragmentInteractionListener) context;
+            mListener.onAttachPlay(this);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnPlayFragmentInteractionListener");
@@ -145,7 +147,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPlayFragmentInteractionListener {
-
+        void onAttachPlay(PlayFragment p);
         void chordTouch(int chord, boolean down_press);
         int changeKey(int delta);
         int getNextKey();
