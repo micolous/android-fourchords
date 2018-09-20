@@ -17,7 +17,6 @@ package au.id.micolous.midi4chords;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -72,11 +71,11 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_play, container, false);
 
-        mNextKeyButton = (Button) v.findViewById(R.id.button_keychange);
-        mButtonMajFirst = (Button) v.findViewById(R.id.button_maj_first);
-        mButtonPerFifth = (Button) v.findViewById(R.id.button_per_fifth);
-        mButtonMinSixth = (Button) v.findViewById(R.id.button_min_sixth);
-        mButtonPerFourth = (Button) v.findViewById(R.id.button_per_fourth);
+        mNextKeyButton = v.findViewById(R.id.button_keychange);
+        mButtonMajFirst = v.findViewById(R.id.button_maj_first);
+        mButtonPerFifth = v.findViewById(R.id.button_per_fifth);
+        mButtonMinSixth = v.findViewById(R.id.button_min_sixth);
+        mButtonPerFourth = v.findViewById(R.id.button_per_fourth);
 
         // Accessibility issue: performClick can't be handled here, because their presses are
         // instant.

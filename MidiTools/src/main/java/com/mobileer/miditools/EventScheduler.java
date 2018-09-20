@@ -39,7 +39,7 @@ public class EventScheduler {
     private static final int MAX_POOL_SIZE = 200;
 
     public EventScheduler() {
-        mEventBuffer = new TreeMap<Long, FastEventQueue>();
+        mEventBuffer = new TreeMap<>();
     }
 
     // If we keep at least one node in the list then it can be atomic

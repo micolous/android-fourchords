@@ -22,10 +22,6 @@ import android.media.AudioTrack;
 import android.os.Build;
 import android.util.Log;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * Optimize the buffer size for an AudioTrack based on the underrun count.
  * Just call update() after every write() to the AudioTrack.

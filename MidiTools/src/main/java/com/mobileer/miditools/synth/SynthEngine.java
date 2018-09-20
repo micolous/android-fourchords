@@ -46,9 +46,9 @@ public class SynthEngine extends MidiReceiver {
     private float mBendRange = 2.0f; // semitones
     private int mProgram;
 
-    private ArrayList<SynthVoice> mFreeVoices = new ArrayList<SynthVoice>();
+    private ArrayList<SynthVoice> mFreeVoices = new ArrayList<>();
     private Hashtable<Integer, SynthVoice>
-            mVoices = new Hashtable<Integer, SynthVoice>();
+            mVoices = new Hashtable<>();
     private MidiEventScheduler mEventScheduler;
     private MidiFramer mFramer;
     private MidiReceiver mReceiver = new MyReceiver();
@@ -95,8 +95,7 @@ public class SynthEngine extends MidiReceiver {
 
     private class MyReceiver extends MidiReceiver {
         @Override
-        public void onSend(byte[] data, int offset, int count, long timestamp)
-                throws IOException {
+        public void onSend(byte[] data, int offset, int count, long timestamp) {
             byte command = (byte) (data[0] & MidiConstants.STATUS_COMMAND_MASK);
             int channel = (byte) (data[0] & MidiConstants.STATUS_CHANNEL_MASK);
             switch (command) {
@@ -176,11 +175,11 @@ public class SynthEngine extends MidiReceiver {
      * @param count
      */
     public void logMidiMessage(byte[] data, int offset, int count) {
-        String text = "Received: ";
+        StringBuilder text = new StringBuilder("Received: ");
         for (int i = 0; i < count; i++) {
-            text += String.format("0x%02X, ", data[offset + i]);
+            text.append(String.format("0x%02X, ", data[offset + i]));
         }
-        Log.i(TAG, text);
+        Log.i(TAG, text.toString());
     }
 
     /**
@@ -225,9 +224,7 @@ public class SynthEngine extends MidiReceiver {
     }
 
     public void allNotesOff() {
-        Iterator<SynthVoice> iterator = mVoices.values().iterator();
-        while (iterator.hasNext()) {
-            SynthVoice voice = iterator.next();
+        for (SynthVoice voice : mVoices.values()) {
             voice.noteOff();
         }
     }
@@ -270,9 +267,7 @@ public class SynthEngine extends MidiReceiver {
     public void pitchBend(int channel, int bend) {
         double semitones = (mBendRange * (bend - 0x2000)) / 0x2000;
         mFrequencyScaler = (float) Math.pow(2.0, semitones / 12.0);
-        Iterator<SynthVoice> iterator = mVoices.values().iterator();
-        while (iterator.hasNext()) {
-            SynthVoice voice = iterator.next();
+        for (SynthVoice voice : mVoices.values()) {
             voice.setFrequencyScaler(mFrequencyScaler);
         }
     }

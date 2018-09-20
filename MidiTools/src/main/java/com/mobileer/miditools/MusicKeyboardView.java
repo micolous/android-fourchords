@@ -23,7 +23,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -87,18 +86,18 @@ public class MusicKeyboardView extends View {
     private Paint mWhiteOffKeyPaint;
     private boolean mLegato = true;
 
-    private HashMap<Integer, Integer> mFingerMap = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mFingerMap = new HashMap<>();
     // Note number for the left most key.
     private int mLowestPitch = PITCH_MIDDLE_C - NOTES_PER_OCTAVE;
-    private ArrayList<MusicKeyListener> mListeners = new ArrayList<MusicKeyListener>();
+    private ArrayList<MusicKeyListener> mListeners = new ArrayList<>();
 
     /** Implement this to receive keyboard events. */
     public interface MusicKeyListener {
         /** This will be called when a key is pressed. */
-        public void onKeyDown(int keyIndex);
+        void onKeyDown(int keyIndex);
 
         /** This will be called when a key is pressed. */
-        public void onKeyUp(int keyIndex);
+        void onKeyUp(int keyIndex);
     }
 
     public MusicKeyboardView(Context context, AttributeSet attrs) {
@@ -152,7 +151,7 @@ public class MusicKeyboardView extends View {
 
     private void makeBlackRectangles() {
         int top = 0;
-        ArrayList<Rect> rectangles = new ArrayList<Rect>();
+        ArrayList<Rect> rectangles = new ArrayList<>();
 
         int whiteKeyIndex = 0;
         int blackKeyIndex = 0;
@@ -341,9 +340,8 @@ public class MusicKeyboardView extends View {
         int whiteKeyIndex = (int) (x / mWhiteKeyWidth);
         int octave = whiteKeyIndex / WHITE_KEY_OFFSETS.length;
         int indexInOctave = whiteKeyIndex - (octave * WHITE_KEY_OFFSETS.length);
-        int pitch = mLowestPitch + (octave * NOTES_PER_OCTAVE) +
+        return mLowestPitch + (octave * NOTES_PER_OCTAVE) +
                 WHITE_KEY_OFFSETS[indexInOctave];
-        return pitch;
     }
 
     // Convert x to MIDI pitch. Ignores white keys.

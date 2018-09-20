@@ -79,7 +79,7 @@ public class MidiPortConnector {
          *            a {@link MidiConnection} that represents the connected
          *            ports, or null if connection failed
          */
-        abstract public void onPortsConnected(MidiConnection connection);
+        void onPortsConnected(MidiConnection connection);
     }
 
     /**
@@ -116,39 +116,36 @@ public class MidiPortConnector {
             final OnPortsConnectedListener listener, final Handler handler) {
         safeClose();
         mMidiManager.openDevice(destinationDeviceInfo,
-                new MidiManager.OnDeviceOpenedListener() {
-                    @Override
-                    public void onDeviceOpened(MidiDevice destinationDevice) {
-                        if (destinationDevice == null) {
+                destinationDevice -> {
+                    if (destinationDevice == null) {
+                        Log.e(MidiConstants.TAG,
+                                "could not open " + destinationDeviceInfo);
+                        if (listener != null) {
+                            listener.onPortsConnected(null);
+                        }
+                    } else {
+                        mDestinationDevice = destinationDevice;
+                        Log.i(MidiConstants.TAG,
+                                "connectToDevicePort opened "
+                                        + destinationDeviceInfo);
+                        // Destination device was opened so go to next step.
+                        MidiInputPort destinationInputPort = destinationDevice
+                                .openInputPort(destinationPortIndex);
+                        if (destinationInputPort != null) {
+                            Log.i(MidiConstants.TAG,
+                                    "connectToDevicePort opened port on "
+                                            + destinationDeviceInfo);
+                            connectToDevicePort(sourceDeviceInfo,
+                                    sourcePortIndex,
+                                    destinationInputPort,
+                                    listener, handler);
+                        } else {
                             Log.e(MidiConstants.TAG,
-                                    "could not open " + destinationDeviceInfo);
+                                    "could not open port on "
+                                            + destinationDeviceInfo);
+                            safeClose();
                             if (listener != null) {
                                 listener.onPortsConnected(null);
-                            }
-                        } else {
-                            mDestinationDevice = destinationDevice;
-                            Log.i(MidiConstants.TAG,
-                                    "connectToDevicePort opened "
-                                            + destinationDeviceInfo);
-                            // Destination device was opened so go to next step.
-                            MidiInputPort destinationInputPort = destinationDevice
-                                    .openInputPort(destinationPortIndex);
-                            if (destinationInputPort != null) {
-                                Log.i(MidiConstants.TAG,
-                                        "connectToDevicePort opened port on "
-                                                + destinationDeviceInfo);
-                                connectToDevicePort(sourceDeviceInfo,
-                                        sourcePortIndex,
-                                        destinationInputPort,
-                                        listener, handler);
-                            } else {
-                                Log.e(MidiConstants.TAG,
-                                        "could not open port on "
-                                                + destinationDeviceInfo);
-                                safeClose();
-                                if (listener != null) {
-                                    listener.onPortsConnected(null);
-                                }
                             }
                         }
                     }
@@ -169,32 +166,29 @@ public class MidiPortConnector {
             final MidiInputPort destinationInputPort,
             final OnPortsConnectedListener listener, final Handler handler) {
         mMidiManager.openDevice(sourceDeviceInfo,
-                new MidiManager.OnDeviceOpenedListener() {
-                    @Override
-                    public void onDeviceOpened(MidiDevice device) {
-                        if (device == null) {
-                            Log.e(MidiConstants.TAG,
-                                    "could not open " + sourceDeviceInfo);
-                            safeClose();
-                            if (listener != null) {
-                                listener.onPortsConnected(null);
-                            }
-                        } else {
-                            Log.i(MidiConstants.TAG,
-                                    "connectToDevicePort opened "
-                                            + sourceDeviceInfo);
-                            // Device was opened so connect the ports.
-                            mSourceDevice = device;
-                            mConnection = device.connectPorts(
-                                    destinationInputPort, sourcePortIndex);
-                            if (mConnection == null) {
-                                Log.e(MidiConstants.TAG, "could not connect to "
+                device -> {
+                    if (device == null) {
+                        Log.e(MidiConstants.TAG,
+                                "could not open " + sourceDeviceInfo);
+                        safeClose();
+                        if (listener != null) {
+                            listener.onPortsConnected(null);
+                        }
+                    } else {
+                        Log.i(MidiConstants.TAG,
+                                "connectToDevicePort opened "
                                         + sourceDeviceInfo);
-                                safeClose();
-                            }
-                            if (listener != null) {
-                                listener.onPortsConnected(mConnection);
-                            }
+                        // Device was opened so connect the ports.
+                        mSourceDevice = device;
+                        mConnection = device.connectPorts(
+                                destinationInputPort, sourcePortIndex);
+                        if (mConnection == null) {
+                            Log.e(MidiConstants.TAG, "could not connect to "
+                                    + sourceDeviceInfo);
+                            safeClose();
+                        }
+                        if (listener != null) {
+                            listener.onPortsConnected(mConnection);
                         }
                     }
                 }, handler);

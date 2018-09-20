@@ -62,7 +62,7 @@ public class TestMidiFramer {
 
     // Store received messages in an array.
     class MyLoggingReceiver extends MidiReceiver {
-        ArrayList<MidiMessage> messages = new ArrayList<MidiMessage>();
+        ArrayList<MidiMessage> messages = new ArrayList<>();
 
         @Override
         public void onSend(byte[] data, int offset, int count,

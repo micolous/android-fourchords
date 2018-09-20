@@ -51,24 +51,20 @@ public class MidiOutputPortSelector extends MidiPortSelector {
 
         final MidiDeviceInfo info = wrapper.getDeviceInfo();
         if (info != null) {
-            mMidiManager.openDevice(info, new MidiManager.OnDeviceOpenedListener() {
-
-                    @Override
-                public void onDeviceOpened(MidiDevice device) {
-                    if (device == null) {
-                        Log.e(MidiConstants.TAG, "could not open " + info);
-                    } else {
-                        mOpenDevice = device;
-                        mOutputPort = device.openOutputPort(wrapper.getPortIndex());
-                        if (mOutputPort == null) {
-                            Log.e(MidiConstants.TAG,
-                                    "could not open output port for " + info);
-                            return;
-                        }
-                        mOutputPort.connect(mDispatcher);
-                    }
+            mMidiManager.openDevice(info, device -> {
+            if (device == null) {
+                Log.e(MidiConstants.TAG, "could not open " + info);
+            } else {
+                mOpenDevice = device;
+                mOutputPort = device.openOutputPort(wrapper.getPortIndex());
+                if (mOutputPort == null) {
+                    Log.e(MidiConstants.TAG,
+                            "could not open output port for " + info);
+                    return;
                 }
-            }, null);
+                mOutputPort.connect(mDispatcher);
+            }
+        }, null);
             // Don't run the callback on the UI thread because openOutputPort might take a while.
         }
     }

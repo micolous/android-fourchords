@@ -58,23 +58,29 @@ public class MidiFramer extends MidiReceiver {
                     mCount = 1;
                     mNeeded = MidiConstants.getBytesPerMessage(currentByte) - 1;
                 } else if (currentInt < 0xF8) { // system common?
-                    if (currentInt == 0xF0 /* SysEx Start */) {
-                        // Log.i(TAG, "SysEx Start");
-                        mInSysEx = true;
-                        sysExStartOffset = offset;
-                    } else if (currentInt == 0xF7 /* SysEx End */) {
-                        // Log.i(TAG, "SysEx End");
-                        if (mInSysEx) {
-                            mReceiver.send(data, sysExStartOffset,
-                                offset - sysExStartOffset + 1, timestamp);
-                            mInSysEx = false;
-                            sysExStartOffset = -1;
-                        }
-                    } else {
-                        mBuffer[0] = currentByte;
-                        mRunningStatus = 0;
-                        mCount = 1;
-                        mNeeded = MidiConstants.getBytesPerMessage(currentByte) - 1;
+                    switch (currentInt) {
+                        case 0xF0: /* SysEx Start */
+                            // Log.i(TAG, "SysEx Start");
+                            mInSysEx = true;
+                            sysExStartOffset = offset;
+                            break;
+
+                        case 0xF7: /* SysEx End */
+                            // Log.i(TAG, "SysEx End");
+                            if (mInSysEx) {
+                                mReceiver.send(data, sysExStartOffset,
+                                        offset - sysExStartOffset + 1, timestamp);
+                                mInSysEx = false;
+                                sysExStartOffset = -1;
+                            }
+                            break;
+
+                        default:
+                            mBuffer[0] = currentByte;
+                            mRunningStatus = 0;
+                            mCount = 1;
+                            mNeeded = MidiConstants.getBytesPerMessage(currentByte) - 1;
+                            break;
                     }
                 } else { // real-time?
                     // Single byte message interleaved with other data.

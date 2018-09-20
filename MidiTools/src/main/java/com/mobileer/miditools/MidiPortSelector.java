@@ -36,7 +36,7 @@ import java.util.HashSet;
 public abstract class MidiPortSelector extends DeviceCallback {
     private int mType = MidiDeviceInfo.PortInfo.TYPE_INPUT;
     protected ArrayAdapter<MidiPortWrapper> mAdapter;
-    protected HashSet<MidiPortWrapper> mBusyPorts = new HashSet<MidiPortWrapper>();
+    protected HashSet<MidiPortWrapper> mBusyPorts = new HashSet<>();
     private Spinner mSpinner;
     protected MidiManager mMidiManager;
     protected View mActivity;
@@ -55,7 +55,7 @@ public abstract class MidiPortSelector extends DeviceCallback {
         mMidiManager = midiManager;
         mActivity = activity;
         mType = type;
-        mSpinner = (Spinner) activity.findViewById(spinnerId);
+        mSpinner = activity.findViewById(spinnerId);
         mAdapter = new ArrayAdapter<>(mSpinner.getContext(),
                 android.R.layout.simple_spinner_item);
         mAdapter.setDropDownViewResource(
@@ -95,9 +95,8 @@ public abstract class MidiPortSelector extends DeviceCallback {
     }
 
     private int getInfoPortCount(final MidiDeviceInfo info) {
-        int portCount = (mType == MidiDeviceInfo.PortInfo.TYPE_INPUT)
+        return (mType == MidiDeviceInfo.PortInfo.TYPE_INPUT)
                 ? info.getInputPortCount() : info.getOutputPortCount();
-        return portCount;
     }
 
     @Override

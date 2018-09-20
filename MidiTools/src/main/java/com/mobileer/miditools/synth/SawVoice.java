@@ -53,8 +53,7 @@ public class SawVoice extends SynthVoice {
 
     @Override
     public float render() {
-        float output = mOscillator.render() * mEnvelope.render();
-        return output;
+        return mOscillator.render() * mEnvelope.render();
     }
 
     @Override

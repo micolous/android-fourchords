@@ -16,7 +16,6 @@
 
 package com.mobileer.miditools;
 
-import android.app.Activity;
 import android.media.midi.MidiDevice;
 import android.media.midi.MidiDeviceInfo;
 import android.media.midi.MidiInputPort;
@@ -50,21 +49,18 @@ public class MidiInputPortSelector extends MidiPortSelector {
         close();
         final MidiDeviceInfo info = wrapper.getDeviceInfo();
         if (info != null) {
-            mMidiManager.openDevice(info, new MidiManager.OnDeviceOpenedListener() {
-                    @Override
-                public void onDeviceOpened(MidiDevice device) {
-                    if (device == null) {
-                        Log.e(MidiConstants.TAG, "could not open " + info);
-                    } else {
-                        mOpenDevice = device;
-                        mInputPort = mOpenDevice.openInputPort(
-                                wrapper.getPortIndex());
-                        if (mInputPort == null) {
-                            Log.e(MidiConstants.TAG, "could not open input port on " + info);
-                        }
-                    }
+            mMidiManager.openDevice(info, device -> {
+            if (device == null) {
+                Log.e(MidiConstants.TAG, "could not open " + info);
+            } else {
+                mOpenDevice = device;
+                mInputPort = mOpenDevice.openInputPort(
+                        wrapper.getPortIndex());
+                if (mInputPort == null) {
+                    Log.e(MidiConstants.TAG, "could not open input port on " + info);
                 }
-            }, null);
+            }
+        }, null);
             // Don't run the callback on the UI thread because openInputPort might take a while.
         }
     }

@@ -153,8 +153,7 @@ public class SimpleAudioOutput {
                 .setAudioFormat(format);
         if (doLowLatency) {
             // Start with a bigger buffer because we can lower it later.
-            int bufferSizeInFrames = LOW_LATENCY_BUFFER_CAPACITY_IN_FRAMES;
-            builder.setBufferSizeInBytes(bufferSizeInFrames * BYTES_PER_FRAME);
+            builder.setBufferSizeInBytes(LOW_LATENCY_BUFFER_CAPACITY_IN_FRAMES * BYTES_PER_FRAME);
         }
         AudioTrack track = builder.build();
         if (track == null) {

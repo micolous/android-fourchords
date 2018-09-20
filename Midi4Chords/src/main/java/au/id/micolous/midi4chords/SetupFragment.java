@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -79,24 +78,19 @@ public class SetupFragment extends Fragment {
             (new AlertDialog.Builder(getContext()))
                     .setMessage(R.string.no_midi)
                     .setTitle(R.string.no_midi_title)
-                    .setPositiveButton(R.string.quit, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            getActivity().finish();
-                        }
-                    })
+                    .setPositiveButton(R.string.quit, (dialogInterface, i) -> getActivity().finish())
                     .setCancelable(false)
                     .show();
             return v;
         }
 
-        mProgramButton = (Button) v.findViewById(R.id.button_program);
-        mTempoButton = (Button) v.findViewById(R.id.button_tempo);
+        mProgramButton = v.findViewById(R.id.button_program);
+        mTempoButton = v.findViewById(R.id.button_tempo);
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.spinner_channels);
+        Spinner spinner = v.findViewById(R.id.spinner_channels);
         spinner.setOnItemSelectedListener(new ChannelSpinnerActivity());
 
-        Spinner modeSpinner = (Spinner) v.findViewById(R.id.spinner_modes);
+        Spinner modeSpinner = v.findViewById(R.id.spinner_modes);
         modeSpinner.setOnItemSelectedListener(new ModeSpinnerActivity());
 
         if (mListener != null) {

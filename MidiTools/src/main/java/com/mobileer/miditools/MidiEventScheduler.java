@@ -18,8 +18,6 @@ package com.mobileer.miditools;
 
 import android.media.midi.MidiReceiver;
 
-import java.io.IOException;
-
 /**
  * Add MIDI Events to an EventScheduler
  */
@@ -36,8 +34,7 @@ public class MidiEventScheduler extends EventScheduler {
          * time.
          */
         @Override
-        public void onSend(byte[] msg, int offset, int count, long timestamp)
-                throws IOException {
+        public void onSend(byte[] msg, int offset, int count, long timestamp) {
             MidiEvent event = createScheduledEvent(msg, offset, count, timestamp);
             if (event != null) {
                 add(event);
@@ -63,11 +60,11 @@ public class MidiEventScheduler extends EventScheduler {
 
         @Override
         public String toString() {
-            String text = "Event: ";
+            StringBuilder text = new StringBuilder("Event: ");
             for (int i = 0; i < count; i++) {
-                text += data[i] + ", ";
+                text.append(data[i]).append(", ");
             }
-            return text;
+            return text.toString();
         }
     }
 

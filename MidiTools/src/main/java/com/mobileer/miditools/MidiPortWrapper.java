@@ -50,10 +50,10 @@ public class MidiPortWrapper {
                         + mInfo.getProperties()
                                 .getString(MidiDeviceInfo.PROPERTY_PRODUCT);
             }
-            sb.append("#" + mInfo.getId());
+            sb.append("#").append(mInfo.getId());
             sb.append(", ").append(name);
             PortInfo portInfo = findPortInfo();
-            sb.append("[" + mPortIndex + "]");
+            sb.append("[").append(mPortIndex).append("]");
             if (portInfo != null) {
                 sb.append(", ").append(portInfo.getName());
             } else {

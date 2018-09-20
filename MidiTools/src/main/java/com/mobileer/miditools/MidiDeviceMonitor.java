@@ -50,7 +50,7 @@ public class MidiDeviceMonitor {
 
     private static MidiDeviceMonitor mInstance;
     private MidiManager mMidiManager;
-    private HashMap<DeviceCallback, Handler> mCallbacks = new HashMap<DeviceCallback,Handler>();
+    private HashMap<DeviceCallback, Handler> mCallbacks = new HashMap<>();
     private MyDeviceCallback mMyDeviceCallback;
     // We only need the workaround for versions before N.
     private boolean mUseProxy = Build.VERSION.SDK_INT <= Build.VERSION_CODES.M;
@@ -68,12 +68,7 @@ public class MidiDeviceMonitor {
                 if(handler == null) {
                     callback.onDeviceAdded(device);
                 } else {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDeviceAdded(device);
-                        }
-                    });
+                    handler.post(() -> callback.onDeviceAdded(device));
                 }
             }
         }
@@ -86,12 +81,7 @@ public class MidiDeviceMonitor {
                 if(handler == null) {
                     callback.onDeviceRemoved(device);
                 } else {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDeviceRemoved(device);
-                        }
-                    });
+                    handler.post(() -> callback.onDeviceRemoved(device));
                 }
             }
         }
@@ -104,12 +94,7 @@ public class MidiDeviceMonitor {
                 if(handler == null) {
                     callback.onDeviceStatusChanged(status);
                 } else {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDeviceStatusChanged(status);
-                        }
-                    });
+                    handler.post(() -> callback.onDeviceStatusChanged(status));
                 }
             }
         }
