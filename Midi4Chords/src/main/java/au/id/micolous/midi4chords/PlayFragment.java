@@ -157,8 +157,11 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
      */
     public interface OnPlayFragmentInteractionListener {
         void onAttachPlay(PlayFragment p);
+
         void chordTouch(int chord, boolean down_press);
+
         int changeKey(int delta);
+
         int getNextKey();
     }
 }

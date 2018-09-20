@@ -20,7 +20,7 @@ import au.id.micolous.midi4chords.MidiController;
 
 /**
  * Implements Chord + Arpeggio playback:
- *
+ * <p>
  * 1. Play the whole chord
  * 2. Play the third
  * 3. Play the fifth

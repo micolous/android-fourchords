@@ -133,34 +133,35 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        if (actionBar != null) {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
+            // When swiping between different sections, select the corresponding
+            // tab. We can also use ActionBar.Tab#select() to do this if we have
+            // a reference to the Tab.
+            mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    actionBar.setSelectedNavigationItem(position);
+                }
+            });
+
+            // For each of the sections in the app, add a tab to the action bar.
+            for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+                // Create a tab with text corresponding to the page title defined by
+                // the adapter. Also specify this Activity object, which implements
+                // the TabListener interface, as the callback (listener) for when
+                // this tab is selected.
+                actionBar.addTab(
+                        actionBar.newTab()
+                                .setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setTabListener(this));
             }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
         }
 
         if (savedInstanceState == null) {
             mSetupFragment = SetupFragment.newInstance();
             mPlayFragment = PlayFragment.newInstance();
-
 
             mKey = mNextKey = 0;
             mPlaybackMode = PLAYBACK_MODES[0];
@@ -178,7 +179,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY, mKey);
-        outState.putInt(MODE,  mPlaybackModeOffset);
+        outState.putInt(MODE, mPlaybackModeOffset);
         outState.putInt(TEMPO, mTempo);
     }
 
@@ -317,6 +318,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
 
     /**
      * Gets the playback interval, in milliseconds.
+     *
      * @return milliseconds
      */
     private int playbackInterval() {
@@ -373,19 +375,19 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
     }
 
     public void noteOff(int pitch) {
-        noteOff(mChannel, pitch, DEFAULT_VELOCITY);
+        noteOff(mChannel, pitch);
     }
 
-    private void noteOff(int channel, int pitch, int velocity) {
-        midiCommand(MidiConstants.STATUS_NOTE_OFF + channel, pitch, velocity);
+    private void noteOff(int channel, int pitch) {
+        midiCommand(MidiConstants.STATUS_NOTE_OFF + channel, pitch, MainActivity.DEFAULT_VELOCITY);
     }
 
     public void noteOn(int pitch) {
-        noteOn(mChannel, pitch, DEFAULT_VELOCITY);
+        noteOn(mChannel, pitch);
     }
 
-    private void noteOn(int channel, int pitch, int velocity) {
-        midiCommand(MidiConstants.STATUS_NOTE_ON + channel, pitch, velocity);
+    private void noteOn(int channel, int pitch) {
+        midiCommand(MidiConstants.STATUS_NOTE_ON + channel, pitch, MainActivity.DEFAULT_VELOCITY);
     }
 
     public void midiCommand(int status, int data1, int data2) {
@@ -438,6 +440,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Mid
         return mTempo;
     }
 
-    public int getNextKey() { return mNextKey; }
+    public int getNextKey() {
+        return mNextKey;
+    }
 
 }

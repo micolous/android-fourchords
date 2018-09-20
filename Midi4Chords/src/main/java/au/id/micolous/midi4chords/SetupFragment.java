@@ -18,7 +18,6 @@ package au.id.micolous.midi4chords;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -188,7 +187,6 @@ public class SetupFragment extends Fragment {
     }
 
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -201,10 +199,15 @@ public class SetupFragment extends Fragment {
      */
     public interface OnSetupFragmentInteractionListener {
         void setChannel(int channel);
+
         int getChannel();
+
         void midiCommand(int status, int data1);
+
         void changeTempo(int delta);
+
         int getTempo();
+
         void setupMidi(View v);
 
         void setPlaybackMode(int i);

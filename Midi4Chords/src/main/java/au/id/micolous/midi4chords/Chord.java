@@ -39,13 +39,17 @@ public class Chord {
 
     /**
      * list of offsets to the chord's major (I, V, IV) or minor (vi) third
-     * */
+     */
     private static final int[] THIRD_OFFSET = {4, 4, 3, 4};
 
-    /** offset to the chord's perfect fifth, same for all */
+    /**
+     * offset to the chord's perfect fifth, same for all
+     */
     private static final int FIFTH_OFFSET = 7;
 
-    /** offset to the root octave */
+    /**
+     * offset to the root octave
+     */
     private static final int OCTAVE_OFFSET = 12;
 
     public final int root;

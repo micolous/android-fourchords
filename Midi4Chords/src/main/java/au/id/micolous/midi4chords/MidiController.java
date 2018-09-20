@@ -21,12 +21,14 @@ package au.id.micolous.midi4chords;
 public interface MidiController {
     /**
      * Starts playing a note
+     *
      * @param note MIDI note identifier
      */
     void noteOn(int note);
 
     /**
      * Stops playing a note
+     *
      * @param note MIDI note identifier
      */
     void noteOff(int note);

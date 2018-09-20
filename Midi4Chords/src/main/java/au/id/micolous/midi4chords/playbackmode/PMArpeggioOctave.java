@@ -20,7 +20,7 @@ import au.id.micolous.midi4chords.MidiController;
 
 /**
  * Implements an Arpeggio playback of the full octave:
- *
+ * <p>
  * 1. Play the root
  * 2. Play the third
  * 3. Play the fifth
