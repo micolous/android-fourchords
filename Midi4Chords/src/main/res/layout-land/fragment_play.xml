@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:text="I"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
         <Button
             android:id="@+id/button_per_fourth"
@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:text="IV"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
         <Button
             android:id="@+id/button_per_fifth"
@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:text="V"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
         <Button
             android:id="@+id/button_min_sixth"
@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:text="vi"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
     </LinearLayout>
 

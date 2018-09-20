@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package au.id.micolous.midi4chords.playbackmode;
-
-import au.id.micolous.midi4chords.Chord;
-import au.id.micolous.midi4chords.MidiController;
+package au.id.micolous.midi4chords.music;
 
 /**
  * Implements Chord + Arpeggio playback:
@@ -31,20 +28,7 @@ import au.id.micolous.midi4chords.MidiController;
  * 8. Play the third
  */
 
-public class PMChordArpeggio implements PlaybackMode {
-    @Override
-    public void start(MidiController m, Chord c) {
-        cycle(m, c, 0);
-    }
-
-    @Override
-    public void stop(MidiController m, Chord c) {
-        m.noteOff(c.root);
-        m.noteOff(c.third);
-        m.noteOff(c.fifth);
-        m.noteOff(c.octave);
-    }
-
+public class PMChordArpeggio extends PlaybackMode {
     @Override
     public void cycle(MidiController m, Chord c, int count) {
         switch (count) {

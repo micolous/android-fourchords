@@ -41,12 +41,14 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import au.id.micolous.midi4chords.playbackmode.PMArpeggio;
-import au.id.micolous.midi4chords.playbackmode.PMArpeggioOctave;
-import au.id.micolous.midi4chords.playbackmode.PMChord;
-import au.id.micolous.midi4chords.playbackmode.PMChordArpeggio;
-import au.id.micolous.midi4chords.playbackmode.PMChordArpeggioOctave;
-import au.id.micolous.midi4chords.playbackmode.PlaybackMode;
+import au.id.micolous.midi4chords.music.Chord;
+import au.id.micolous.midi4chords.music.MidiController;
+import au.id.micolous.midi4chords.music.PMArpeggio;
+import au.id.micolous.midi4chords.music.PMArpeggioOctave;
+import au.id.micolous.midi4chords.music.PMChord;
+import au.id.micolous.midi4chords.music.PMChordArpeggio;
+import au.id.micolous.midi4chords.music.PMChordArpeggioOctave;
+import au.id.micolous.midi4chords.music.PlaybackMode;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, MidiController, SetupFragment.OnSetupFragmentInteractionListener, PlayFragment.OnPlayFragmentInteractionListener {
 

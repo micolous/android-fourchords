@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package au.id.micolous.midi4chords;
+package au.id.micolous.midi4chords.music;
 
 /**
- * Interface that allows simple MIDI commands.
+ * Mode that plays a complete chord once.
  */
-public interface MidiController {
-    /**
-     * Starts playing a note
-     *
-     * @param note MIDI note identifier
-     */
-    void noteOn(int note);
 
-    /**
-     * Stops playing a note
-     *
-     * @param note MIDI note identifier
-     */
-    void noteOff(int note);
+public class PMChord extends PlaybackMode {
+    @Override
+    public void start(MidiController m, Chord c) {
+        m.noteOn(c.root);
+        m.noteOn(c.third);
+        m.noteOn(c.fifth);
+        m.noteOn(c.octave);
+    }
 }

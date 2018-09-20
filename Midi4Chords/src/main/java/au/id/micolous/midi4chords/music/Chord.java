@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package au.id.micolous.midi4chords;
+package au.id.micolous.midi4chords.music;
 
 /**
  * Represents a chord.

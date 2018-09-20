@@ -15,10 +15,23 @@ android {
         versionName "${versionMajor}.${versionMinor}"
 
         resValue "string", "versionName", "${defaultConfig.versionName}"
+        // Only English is supported.
+        resConfigs 'en'
+        vectorDrawables {
+            useSupportLibrary = true
+            generatedDensities 'ldpi', 'mdpi', 'hdpi'
+        }
     }
     buildTypes {
+        debug {
+            minifyEnabled true
+            useProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled true
+            shrinkResources true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -31,6 +44,6 @@ android {
 dependencies {
     implementation 'com.android.support:support-v13:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    // implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation project(':MidiTools')
 }
